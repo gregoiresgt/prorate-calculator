@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculateur de Prorata avec TVA</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            max-width: 600px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .input-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .input-container {
+            position: relative;
+            width: 48%;
+        }
+        .input-container input {
+            width: 100%;
+            padding: 10px;
+            padding-right: 3em; /* Pour laisser de la place au suffixe */
+            font-size: 1em;
+            box-sizing: border-box;
+        }
+        .input-container .suffix {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            font-size: 0.9em;
+            color: gray;
+            pointer-events: none;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            font-size: 1em;
+            margin-top: 15px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>Calculateur de Prorata avec TVA</h1>
+
+    <!-- Prix Mensuel -->
+    <label>Prix mensuel</label>
+    <div class="input-group">
+        <div class="input-container">
+            <input type="number" id="monthly-price-ht" placeholder="Hors Taxe (€)" />
+            <span class="suffix">HT</span>
+        </div>
+        <div class="input-container">
+            <input type="number" id="monthly-price-ttc" placeholder="TTC (€)" />
+            <span class="suffix">TTC</span>
+        </div>
+    </div>
+
+    <!-- Prix Corrigé (Optionnel) -->
+    <label>Prix corrigé (optionnel)</label>
+    <div class="input-group">
+        <div class="input-container">
+            <input type="number" id="corrected-price-ht" placeholder="Hors Taxe (€)" />
+            <span class="suffix">HT</span>
+        </div>
+        <div class="input-container">
+            <input type="number" id="corrected-price-ttc" placeholder="TTC (€)" />
+            <span class="suffix">TTC</span>
+        </div>
+    </div>
+
+    <!-- Prix Déjà Facturé (Optionnel) -->
+    <label>Prix déjà facturé (optionnel)</label>
+    <div class="input-group">
+        <div class="input-container">
+            <input type="number" id="billed-price-ht" placeholder="Hors Taxe (€)" />
+            <span class="suffix">HT</span>
+        </div>
+        <div class="input-container">
+            <input type="number" id="billed-price-ttc" placeholder="TTC (€)" />
+            <span class="suffix">TTC</span>
+        </div>
+    </div>
+
+    <!-- Dates -->
+    <label for="start-date">Date de début</label>
+    <input type="date" id="start-date" />
+
+    <label for="end-date">Date de fin</label>
+    <input type="date" id="end-date" />
+
+    <button id="calculate">Calculer le prorata</button>
+
+    <div class="result" id="result"></div>
+
+    <script>
+        const TAX_RATE = 0.2;
+
+        // Fonction pour synchroniser les champs HT et TTC
+        function syncTaxFields(htFieldId, ttcFieldId) {
+            const htField = document.getElementById(htFieldId);
+            const ttcField = document.getElementById(ttcFieldId);
+
+            htField.addEventListener('input', () => {
+                const htValue = parseFloat(htField.value);
+                if (!isNaN(htValue)) {
+                    ttcField.value = (htValue * (1 + TAX_RATE)).toFixed(2);
+                }
+            });
+
+            ttcField.addEventListener('input', () => {
+                const ttcValue = parseFloat(ttcField.value);
+                if (!isNaN(ttcValue)) {
+                    htField.value = (ttcValue / (1 + TAX_RATE)).toFixed(2);
+                }
+            });
+        }
+
+        // Synchronisation des champs HT/TTC
+        syncTaxFields('monthly-price-ht', 'monthly-price-ttc');
+        syncTaxFields('corrected-price-ht', 'corrected-price-ttc');
+        syncTaxFields('billed-price-ht', 'billed-price-ttc');
+
+        document.getElementById('calculate').addEventListener('click', () => {
+            const monthlyPriceHT = parseFloat(document.getElementById('monthly-price-ht').value);
+            const correctedPriceHT = parseFloat(document.getElementById('corrected-price-ht').value) || 0;
+            const billedPriceHT = parseFloat(document.getElementById('billed-price-ht').value) || 0;
+            const startDate = new Date(document.getElementById('start-date').value);
+            const endDate = new Date(document.getElementById('end-date').value);
+
+            if (isNaN(monthlyPriceHT) || !startDate || !endDate || startDate > endDate) {
+                document.getElementById('result').textContent = "Veuillez entrer des données valides.";
+                return;
+            }
+
+            // Nombre total de jours dans le mois
+            const totalDaysInMonth = new Date(startDate.getFullYear(), startDate.getMonth() + 1, 0).getDate();
+
+            // Nombre de jours dans la plage sélectionnée
+            const prorataDays = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
+
+            // Calculs pour le prix mensuel
+            const prorataMonthlyPriceHT = (monthlyPriceHT / totalDaysInMonth) * prorataDays;
+            const prorataMonthlyPriceTTC = prorataMonthlyPriceHT * (1 + TAX_RATE);
+
+            // Calculs pour le prix corrigé
+            const prorataCorrectedPriceHT = correctedPriceHT
+                ? (correctedPriceHT / totalDaysInMonth) * prorataDays
+                : prorataMonthlyPriceHT;
+            const prorataCorrectedPriceTTC = prorataCorrectedPriceHT * (1 + TAX_RATE);
+
+            // Calcul de la différence
+            const differenceHT = prorataCorrectedPriceHT - prorataMonthlyPriceHT;
+            const adjustedDifferenceHT = differenceHT - billedPriceHT;
+            const adjustedDifferenceTTC = adjustedDifferenceHT * (1 + TAX_RATE);
+
+            // Afficher les résultats
+            document.getElementById('result').innerHTML = `
+                <p>Prix proratisé (Prix mensuel) : <strong>${prorataMonthlyPriceHT.toFixed(2)} € HT</strong> / <strong>${prorataMonthlyPriceTTC.toFixed(2)} € TTC</strong> pour <strong>${prorataDays} jour(s)</strong></p>
+                <p>Prix proratisé (Prix corrigé) : <strong>${prorataCorrectedPriceHT.toFixed(2)} € HT</strong> / <strong>${prorataCorrectedPriceTTC.toFixed(2)} € TTC</strong> pour <strong>${prorataDays} jour(s)</strong></p>
+                <p>Différence entre les deux : <strong>${differenceHT.toFixed(2)} € HT</strong> / <strong>${(differenceHT * (1 + TAX_RATE)).toFixed(2)} € TTC</strong></p>
+                <p>Différence ajustée (après soustraction du prix facturé) : <strong>${adjustedDifferenceHT.toFixed(2)} € HT</strong> / <strong>${adjustedDifferenceTTC.toFixed(2)} € TTC</strong></p>
+            `;
+        });
+    </script>
+</body>
+</html>
