@@ -66,7 +66,7 @@
     <h1>Calculateur de Prorata avec TVA</h1>
 
     <!-- Prix Mensuel -->
-    <label>Prix mensuel</label>
+    <label>Prix loyer d'origine</label>
     <div class="input-group">
         <div class="input-container">
             <input type="number" id="monthly-price-ht" placeholder="Hors Taxe (€)" />
@@ -79,7 +79,7 @@
     </div>
 
     <!-- Prix Corrigé (Optionnel) -->
-    <label>Prix corrigé (optionnel)</label>
+    <label>Prix loyer corrigé (optionnel)</label>
     <div class="input-group">
         <div class="input-container">
             <input type="number" id="corrected-price-ht" placeholder="Hors Taxe (€)" />
@@ -178,10 +178,10 @@
 
             // Afficher les résultats
             document.getElementById('result').innerHTML = `
-                <p>Prix proratisé (Prix mensuel) : <strong>${prorataMonthlyPriceHT.toFixed(2)} € HT</strong> / <strong>${prorataMonthlyPriceTTC.toFixed(2)} € TTC</strong> pour <strong>${prorataDays} jour(s)</strong></p>
-                <p>Prix proratisé (Prix corrigé) : <strong>${prorataCorrectedPriceHT.toFixed(2)} € HT</strong> / <strong>${prorataCorrectedPriceTTC.toFixed(2)} € TTC</strong> pour <strong>${prorataDays} jour(s)</strong></p>
+                <p>Prix loyer d'origine proratisé : <strong>${prorataMonthlyPriceHT.toFixed(2)} € HT</strong> / <strong>${prorataMonthlyPriceTTC.toFixed(2)} € TTC</strong> pour <strong>${prorataDays} jour(s)</strong></p>
+                <p>Prix loyer corrigé proratisé : <strong>${prorataCorrectedPriceHT.toFixed(2)} € HT</strong> / <strong>${prorataCorrectedPriceTTC.toFixed(2)} € TTC</strong> pour <strong>${prorataDays} jour(s)</strong></p>
                 <p>Différence entre les deux : <strong>${differenceHT.toFixed(2)} € HT</strong> / <strong>${(differenceHT * (1 + TAX_RATE)).toFixed(2)} € TTC</strong></p>
-                <p>Différence ajustée (après soustraction du prix facturé) : <strong>${adjustedDifferenceHT.toFixed(2)} € HT</strong> / <strong>${adjustedDifferenceTTC.toFixed(2)} € TTC</strong></p>
+                <p>Différence ajustée (après soustraction du prix déjà facturé) : <strong>${adjustedDifferenceHT.toFixed(2)} € HT</strong> / <strong>${adjustedDifferenceTTC.toFixed(2)} € TTC</strong></p>
             `;
         });
     </script>
