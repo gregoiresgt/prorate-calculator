@@ -56,8 +56,7 @@
             background-color: #0056b3;
         }
         .result {
-            font-size: 1.2em;
-            font-weight: bold;
+            font-size: 1em;
             color: #333;
         }
     </style>
@@ -178,10 +177,10 @@
 
             // Afficher les résultats
             document.getElementById('result').innerHTML = `
-                <p>Prix loyer d'origine proratisé : <strong>${prorataMonthlyPriceHT.toFixed(2)} € HT</strong> / <strong>${prorataMonthlyPriceTTC.toFixed(2)} € TTC</strong> pour <strong>${prorataDays} jour(s)</strong></p>
-                <p>Prix loyer corrigé proratisé : <strong>${prorataCorrectedPriceHT.toFixed(2)} € HT</strong> / <strong>${prorataCorrectedPriceTTC.toFixed(2)} € TTC</strong> pour <strong>${prorataDays} jour(s)</strong></p>
-                <p>Différence entre les deux : <strong>${differenceHT.toFixed(2)} € HT</strong> / <strong>${(differenceHT * (1 + TAX_RATE)).toFixed(2)} € TTC</strong></p>
-                <p>Différence ajustée (après soustraction du prix déjà facturé) : <strong>${adjustedDifferenceHT.toFixed(2)} € HT</strong> / <strong>${adjustedDifferenceTTC.toFixed(2)} € TTC</strong></p>
+                <p>Prix loyer d'origine proratisé : ${prorataMonthlyPriceHT.toFixed(2)} € HT / <strong>${prorataMonthlyPriceTTC.toFixed(2)} € TTC</strong> pour ${prorataDays} jour(s)</p>
+                <p>Prix loyer corrigé proratisé : ${prorataCorrectedPriceHT.toFixed(2)} € HT / <strong>${prorataCorrectedPriceTTC.toFixed(2)} € TTC</strong> pour ${prorataDays} jour(s)</p>
+                <p>Différence entre les deux : ${differenceHT.toFixed(2)} € HT / <strong>${(differenceHT * (1 + TAX_RATE)).toFixed(2)} € TTC</strong></p>
+                <p>Différence ajustée (après soustraction du prix déjà facturé) : ${adjustedDifferenceHT.toFixed(2)} € HT / <strong>${adjustedDifferenceTTC.toFixed(2)} € TTC</strong></p>
             `;
         });
     </script>
