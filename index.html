@@ -91,7 +91,7 @@
     </div>
 
     <!-- Prix Déjà Facturé (Optionnel) -->
-    <label>Montant déjà facturé et à rembourser (optionnel)</label>
+    <label>Montant déjà prélevé et à rembourser (optionnel)</label>
     <div class="input-group">
         <div class="input-container">
             <input type="number" id="billed-price-ht" placeholder="Hors Taxe (€)" />
@@ -180,7 +180,7 @@
                 <p>Prix loyer d'origine proratisé : ${prorataMonthlyPriceHT.toFixed(2)} € HT / <strong>${prorataMonthlyPriceTTC.toFixed(2)} € TTC</strong> pour ${prorataDays} jour(s)</p>
                 <p>Prix loyer corrigé proratisé : ${prorataCorrectedPriceHT.toFixed(2)} € HT / <strong>${prorataCorrectedPriceTTC.toFixed(2)} € TTC</strong> pour ${prorataDays} jour(s)</p>
                 <p>Différence entre les deux : ${differenceHT.toFixed(2)} € HT / <strong>${(differenceHT * (1 + TAX_RATE)).toFixed(2)} € TTC</strong></p>
-                <p>Différence ajustée (après soustraction du prix déjà facturé) : ${adjustedDifferenceHT.toFixed(2)} € HT / <strong>${adjustedDifferenceTTC.toFixed(2)} € TTC</strong></p>
+                <p>Différence ajustée (après soustraction du montant déjà prélevé) : ${adjustedDifferenceHT.toFixed(2)} € HT / <strong>${adjustedDifferenceTTC.toFixed(2)} € TTC</strong></p>
             `;
         });
     </script>
