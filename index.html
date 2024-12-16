@@ -180,11 +180,11 @@
             const absoluteDifferenceTTC = Math.abs(adjustedDifferenceTTC).toFixed(2);
     
             if (adjustedDifferenceTTC > 0) {
-                actionMessage = `<p>Il faut <b style="color: blue;">facturer</b> le client de ${absoluteDifferenceTTC} € TTC</p>`;
+                actionMessage = `<h2>Il faut <b style="color: blue;">facturer</b> le client de ${absoluteDifferenceTTC} € TTC</h2>`;
             } else if (adjustedDifferenceTTC < 0) {
-                actionMessage = `<p>Il faut <b style="color: green;">rembourser</b> le client de ${absoluteDifferenceTTC} € TTC</p>`;
+                actionMessage = `<h2>Il faut <b style="color: green;">rembourser</b> le client de ${absoluteDifferenceTTC} € TTC</h2>`;
             } else {
-                actionMessage = `<p>Aucun ajustement n'est nécessaire.</p>`;
+                actionMessage = `<h2>Aucun ajustement n'est nécessaire.</h2>`;
             }
     
             // Afficher les résultats
